@@ -92,8 +92,8 @@ services:
     networks:
     - sts_network
   sts:
-    build: ./sts-example
-    image: "local/sts-example:latest"
+    build: ./sts-standalone-server
+    image: "local/sts-standalone-server:latest"
     depends_on:
     - sts-db
     networks:
@@ -103,9 +103,11 @@ services:
     - SPRING_DATASOURCE_URL=jdbc:postgresql://sts-db:5432/sts
 #    - SPRING_DATASOURCE_URL=jdbc:mysql://sts-db:3306/sts
     - logging_level_de_adorsys_sts_keyrotation_KeyRotationSchedule=debug
-    - SPRING_APPLICATION_JSON={"sts":{"resource-server-management":{"resource-retriever":{"http-connect-timeout":10000,"http-read-timeout":60000,"http-size-limit":512000},"resource-servers":[{"audience":"sts","jwks-url":"http://localhost:8888/pop"},{"audience":"sts-service-component","jwks-url":"http://sts-service-component:8887/pop"}]}}}
+    - SPRING_APPLICATION_JSON={"sts":{"resource-server-management":{"resource-retriever":{"http-connect-timeout":10000,"http-read-timeout":60000,"http-size-limit":512000},"resource-servers":[{"audience":"sts","jwks-url":"http://localhost:8080/pop"},{"audience":"sts-service-component","jwks-url":"http://sts-service-component:8887/pop"}]}}}
+    volumes:
+    - ./sts-plugins/sts-plugin-example/target/sts-plugin-example.jar:/plugins/sts-plugin-example.jar
     ports:
-    - "8888:8888"
+    - "8888:8080"
   sts-service-component:
     build: ./sts-service-component-example
     image: "local/sts-service-component-example:latest"

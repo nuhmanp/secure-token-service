@@ -1,0 +1,76 @@
+plugin-management:
+  plugins-path: /plugins
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: db_user
+    password: db_user@123
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        default_schema: sts
+  flyway:
+    enabled: false
+    locations:
+    - db/migration/flyway/h2
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/migration/liquibase/changelog.yml
+    default-schema: public
+
+sts:
+  resource-server-management:
+    resource-retriever:
+      http-connect-timeout: 10000
+      http-read-timeout: 60000
+      http-size-limit: 512000
+    resource-servers:
+    - audience: "sts"
+      jwksUrl: "http://localhost:8080/pop"
+  persistence:
+    lock-expiry: 30000
+  keymanagement:
+    rotation:
+      check-interval: 60000
+      enc-key-pairs:
+        min-keys: 5
+        enabled: true
+      sign-key-pairs:
+        min-keys: 5
+        enabled: true
+      secret-keys:
+        min-keys: 5
+        enabled: true
+    persistence:
+      container-name: sts-standalone-container
+      password: ra8taechiuphahshu8bae0beiM9uuK6n
+    keystore:
+      password: LuYie2eebebahNgoopiehaiV9wis7anu
+      type: UBER
+      name: sts-standalone-keystore
+      alias-prefix: sts-standalone-
+      keys:
+        enc-key-pairs:
+          initial-count: 5
+          algo: RSA
+          sig-algo: SHA256withRSA
+          size: 2048
+          name: STS standalone enc key
+          validity-interval: 3600000
+          legacy-interval: 86400000
+        sign-key-pairs:
+          initial-count: 5
+          algo: RSA
+          sig-algo: SHA256withRSA
+          size: 2048
+          name: STS standalone sign key
+          validity-interval: 3600000
+          legacy-interval: 86400000
+        secret-keys:
+          initial-count: 5
+          algo: AES
+          size: 256
+          validity-interval: 3600000
+          legacy-interval: 86400000

@@ -56,6 +56,8 @@
 		<cryptoutils.version>0.18.6</cryptoutils.version>
 		<lock-persistence.version>0.3.1</lock-persistence.version>
 		<jackson.version>2.9.5</jackson.version>
+		<pf4j.version>2.2.0</pf4j.version>
+		<deploy.disabled>false</deploy.disabled>
 		<scmBranch />
 	</properties>
 	
@@ -76,6 +78,9 @@
 		<module>sts-persistence-mongo</module>
 		<module>sts-persistence-fs</module>
 		<module>sts-persistence-docusafe</module>
+		<module>sts-standalone-server</module>
+		<module>sts-pf4j</module>
+		<module>sts-plugins</module>
 	</modules>
 
 	<dependencyManagement>
@@ -159,6 +164,21 @@
 	            <artifactId>sts-persistence-docusafe</artifactId>
 				<version>${project.version}</version>
 	        </dependency>
+			<dependency>
+				<groupId>de.adorsys.sts</groupId>
+				<artifactId>sts-pf4j</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.adorsys.sts</groupId>
+				<artifactId>sts-plugin-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.adorsys.sts</groupId>
+				<artifactId>sts-plugin-spring</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>com.nimbusds</groupId>
@@ -265,6 +285,12 @@
 				<scope>compile</scope>
 	        </dependency>
 
+			<dependency>
+				<groupId>org.pf4j</groupId>
+				<artifactId>pf4j</artifactId>
+				<version>${pf4j.version}</version>
+			</dependency>
+
 			<!-- Excel Parsing -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
@@ -363,6 +389,14 @@
 					<groupId>org.projectlombok</groupId>
 					<artifactId>lombok-maven-plugin</artifactId>
 					<version>1.16.18.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.1</version>
+					<configuration>
+						<skip>${deploy.disabled}</skip>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

@@ -25,6 +25,18 @@ public class ImmutableLists {
         return Collections.unmodifiableList(list);
     }
 
+    public static <T> List<T> of(List<T> object, T... objects) {
+        ArrayList<T> list = new ArrayList<>();
+
+        list.addAll(object);
+
+        if(objects != null) {
+            list.addAll(Arrays.asList(objects));
+        }
+
+        return Collections.unmodifiableList(list);
+    }
+
     private ImmutableLists() {
         throw new IllegalStateException("not supported");
     }
