@@ -14,44 +14,39 @@ Token management solely focuses on managing oAuth tokens and exchanging them lik
 
 ## Development
 
-### Dependencies
+### Build locally on your machine
 
-You can easily use this libraries in your spring boot app via maven dependency:
+Requirements:
+* Java 8
+* Maven 3.x
+
+Build with command:
+```
+$ mvn clean package
+```
+
+### Build within docker
 
 ```
-    <dependency>
-        <groupId>de.adorsys.sts</groupId>
-        <artifactId>sts-spring</artifactId>
-        <version>${version}</version>
-    </dependency>
+docker-compose --file build.docker-compose.yml up --build --remove-orphans 
 ```
 
-### Annotations
+### Integrate functionality in your spring application
 
-You can easily use features by adding following annotations to your spring `@Configuration` class:
-
-| Annotation | Description |
-|------------|-------------|
-| `@EnablePOP` | Enables the Proof-Of-Possession endpoint |
-| `@EnableResourceServerInitialization` | Enables the initialization of the resource server configuration read from the spring properties |
-| `@EnableEncryption` | Enables the encryption service bean |
-| `@EnableDecryption` | Enables the decryption service bean |
-| `@EnableKeyRotation` | Enables the key-rotation for the key-management |
-| `@EnableServerInfo` | Enables the server-info endpoint |
-| `@EnableTokenAuthentication` | Enables token-authentication-service bean |
+For spring-integration look proceed [here](./sts-spring/README.md).
 
 ## Features
 
 ### Proof-Of-Possession
 
-Provides the public keys for encryption and signature check via the `/pop` endpoint.
+[Proof-Of-Possession (POP)](https://tools.ietf.org/html/rfc7800) provides the public keys for encryption and signature check via a rest endpoint located at `/pop`.
 
 Depends on:
 * Key-Management
 
 ### Resource-Server-Configuration
 
-Resource servers are used for encryption to manage the jwks-endpoints.
+The Resource-Servers provides information where the [JSON Web Key Set (JWKS)](https://tools.ietf.org/html/rfc7517) are remotely located.
 
 #### Configuration
 
@@ -70,19 +65,19 @@ sts:
 ```
 
 You have to decide:
-* Which kind of `ResourceServerRepository` you will provide as Bean.
+* Which kind of `ResourceServerRepository` you will provide as Bean. The simplest way is to use the `InMemoryResourceServerRepository` provided in the `de.adorsys.sts.resourceserver.persistence`-package.
 
 ### Encryption
 
-Provides the `EncryptionService` which can be used to encrypt sensitive data. The resource servers are used to get the public keys for encryption from their `/pop` endpoint.
-The encrypted ciphertext is created by [Json Web Encryption](https://tools.ietf.org/search/rfc7516).
+Provides the `EncryptionService` which can be used to encrypt sensitive data. The resource servers are used to get the public keys for encryption from their Proof-Of-Possession endpoint.
+The encrypted ciphertext is created by [Json Web Encryption (JWE)](https://tools.ietf.org/search/rfc7516).
 
 Depends on:
 * Resource-Server-Configuration
 
 ### Decryption
 
-Provides the `DecryptionService` which can be used to decrypt JWE-encrypted ciphertexts. The decryption-key has to be stored in local key-management, otherwise the decryption will fail.
+Provides the `DecryptionService` which can be used to decrypt JWE-encrypted ciphertexts. The decryption-key has to be stored in local Key-Management, otherwise the decryption will fail.
 
 Depends on:
 * Key-Management
@@ -102,16 +97,16 @@ You may enable the key-rotation feature by adding the `@EnableKeyRotation` annot
 sts:
   keymanagement:
     rotation:
-      checkInterval: <(long) the time interval in milliseconds the key-rotation will check the keys>
+      checkInterval: <(long) the time interval in milliseconds the key-rotation will check the keys, default: 30000 (which means: every 30 seconds)>
       encKeyPairs:
-        minKeys: <(integer) minimal count of stored encryption key-pairs>
-        enabled: <(boolean) defines if the key-rotation is enabled for encryption key-pairs>
+        minKeys: <(integer) minimal count of stored encryption key-pairs, default: 5>
+        enabled: <(boolean) defines if the key-rotation is enabled for encryption key-pairs, default: true>
       signKeyPairs:
-        minKeys: <(integer) minimal count of stored signature key-pairs>
-        enabled: <(boolean) defines if the key-rotation is enabled for signature key-pairs>
+        minKeys: <(integer) minimal count of stored signature key-pairs, default: 5>
+        enabled: <(boolean) defines if the key-rotation is enabled for signature key-pairs, default: true>
       secretKeys:
-        minKeys: <(integer) minimal count of stored secret keys>
-        enabled: <(boolean) defines if the key-rotation is enabled for secret-keys>
+        minKeys: <(integer) minimal count of stored secret keys, default: 5>
+        enabled: <(boolean) defines if the key-rotation is enabled for secret-keys, default: true>
 ```
 
 #### Key-generation
@@ -128,32 +123,32 @@ sts:
       alias_prefix: <(text) the prefix of your generated key-aliases in this key-store>
       keys:
         encKeyPairs:
-          initialCount: <(integer) initial count of generated encryption key-pairs>
+          initialCount: <(integer) initial count of generated encryption key-pairs, default: 5>
           algo: <(text) the key-pair algorithm, like "RSA">
           sigAlgo: <(text) the key-pair signature algorithm, like "SHA256withRSA">
           size: <(integer) the key size, like 2048, 4096, ...>
           name: <(text) the string-representation of your key-pair>
-          validityInterval: <(long) the interval in milliseconds the keys can be used for encryption>
-          legacyInterval: <(long) the interval in milliseconds the keys can be used for decryption>
+          validityInterval: <(long) the interval in milliseconds the keys can be used for encryption, default: 3600000 (which means: one hour)>
+          legacyInterval: <(long) the interval in milliseconds the keys can be used for decryption, default: 86400000 (which means: one day)>
         signKeyPairs:
-          initialCount: <(integer) initial count of generated signature key-pairs>
+          initialCount: <(integer) initial count of generated signature key-pairs, default: 5>
           algo: <(text) the key-pair algorithm, like "RSA">
           sigAlgo: <(text) the key-pair signature algorithm, like "SHA256withRSA">
           size: <(integer) the key size, like 2048, 4096, ...>
           name: <(text) the string-representation of your key-pair>
-          validityInterval: <(long) the interval in milliseconds the keys can be used for signature creation>
-          legacyInterval: <(long) the interval in milliseconds the keys can be used for signature check>
+          validityInterval: <(long) the interval in milliseconds the keys can be used for signature creation, default: 3600000 (which means: one hour)>
+          legacyInterval: <(long) the interval in milliseconds the keys can be used for signature check, default: 86400000 (which means: one day)>
         secretKeys:
-          initialCount: <(integer) initial count of generated secret-keys>
+          initialCount: <(integer) initial count of generated secret-keys, default: 5>
           algo: <(text) the key algorithm, like "AES">
           size: <(integer) the key size, like 128, 256, ...>
-          validityInterval: <(long) the interval in milliseconds the keys can be used for encryption>
-          legacyInterval: <(long) the interval in milliseconds the keys can be used for decryption>
+          validityInterval: <(long) the interval in milliseconds the keys can be used for encryption, default: 3600000 (which means: one hour)>
+          legacyInterval: <(long) the interval in milliseconds the keys can be used for decryption, default: 86400000 (which means: one day)>
 ```
 
 ### Token authentication
 
-Provides the `TokenAuthenticationService` Bean which extracts the `org.springframework.security.core.Authentication` from the Bearer token. The token has to be valid, otherwise this operation will return `null`.
+Provides the `TokenAuthenticationService`-Bean which extracts the `org.springframework.security.core.Authentication` from the Bearer token. The token has to be valid, otherwise this operation will return `null`.
 The validation of the token will also be handled in this operation. Only authentication-servers provided by the auth-servers configuration will be accepted.
 It's recommended to use this service in a request-filter (like the `JWTAuthenticationFilter` in this project).
 
@@ -173,15 +168,7 @@ sts:
     refreshIntervalSeconds: <(integer) --- unused >
 ```
 
-## Build this solution
-
-### Within docker
-
-```
-docker-compose --file build.docker-compose.yml up --build --remove-orphans 
-```
-
-## Run example application
+## Run example applications
 
 ```
 docker-compose --file docker-compose.yml up --build --remove-orphans
