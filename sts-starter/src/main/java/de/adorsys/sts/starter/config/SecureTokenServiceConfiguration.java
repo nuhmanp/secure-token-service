@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.adorsys.sts.admin.EnableAdmin;
-import de.adorsys.sts.keymanagement.KeyManagementConfigurationProperties;
+import de.adorsys.sts.keymanagement.core.KeyManagementConfigurationProperties;
 import de.adorsys.sts.keymanagement.persistence.KeyStoreRepository;
 import de.adorsys.sts.keyrotation.EnableKeyRotation;
 import de.adorsys.sts.persistence.FsKeyStoreRepository;

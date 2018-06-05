@@ -21,7 +21,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(HttpMethod.GET,
                         "/",
-                        "/pop"
+                        "/pop",
+                        "/mongo"
                     ).permitAll()
                     .antMatchers(HttpMethod.POST,
                         "/login"

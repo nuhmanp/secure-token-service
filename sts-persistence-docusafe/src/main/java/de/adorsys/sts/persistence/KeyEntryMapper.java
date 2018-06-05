@@ -3,6 +3,7 @@ package de.adorsys.sts.persistence;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 
+import lombok.NoArgsConstructor;
 import org.adorsys.jkeygen.keystore.KeyEntry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

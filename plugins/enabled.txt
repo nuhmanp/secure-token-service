@@ -4,3 +4,6 @@
 # - put this file in plugins folder
 ########################################
 login-plugin
+keymanagement-core-plugin
+mongo-plugin
+#pop-plugin

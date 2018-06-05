@@ -15,8 +15,7 @@
  */
 package de.adorsys.sts.pf4j;
 
-import org.pf4j.DefaultPluginManager;
-import org.pf4j.ExtensionFactory;
+import org.pf4j.*;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -29,13 +28,11 @@ import java.io.File;
 public class SpringPluginManager extends DefaultPluginManager implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+    private final ClassLoader classLoader;
 
-    public SpringPluginManager() {
-        super();
-    }
-
-    public SpringPluginManager(String pluginsPath) {
+    public SpringPluginManager(String pluginsPath, ClassLoader classLoader) {
         super(new File(pluginsPath).toPath());
+        this.classLoader = classLoader;
     }
 
     @Override
@@ -65,4 +62,10 @@ public class SpringPluginManager extends DefaultPluginManager implements Applica
         extensionsInjector.injectExtensions();
     }
 
+    @Override
+    protected PluginLoader createPluginLoader() {
+        return new CompoundPluginLoader()
+                .add(new SpringPluginLoader(this, pluginClasspath, classLoader))
+                .add(new JarPluginLoader(this));
+    }
 }

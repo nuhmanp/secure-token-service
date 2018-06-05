@@ -55,8 +55,9 @@
 		<docusafe.version>0.3.5</docusafe.version>
 		<cryptoutils.version>0.18.6</cryptoutils.version>
 		<lock-persistence.version>0.3.1</lock-persistence.version>
+
 		<jackson.version>2.9.5</jackson.version>
-		<pf4j.version>2.2.0</pf4j.version>
+		<pf4j.version>2.3.0</pf4j.version>
 		<deploy.disabled>false</deploy.disabled>
 		<scmBranch />
 	</properties>
@@ -167,11 +168,6 @@
 			<dependency>
 				<groupId>de.adorsys.sts</groupId>
 				<artifactId>sts-pf4j</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.adorsys.sts</groupId>
-				<artifactId>sts-plugin-api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

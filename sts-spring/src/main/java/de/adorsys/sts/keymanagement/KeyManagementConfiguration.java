@@ -13,19 +13,15 @@ import java.time.Clock;
 @Configuration
 @ComponentScan(
         basePackages = {"de.adorsys.sts.keymanagement"},
-        excludeFilters = @ComponentScan.Filter(
+        excludeFilters = {@ComponentScan.Filter(
                 pattern = "de.adorsys.sts.keymanagement.bouncycastle.*",
                 type = FilterType.REGEX
-        )
+        ), @ComponentScan.Filter(
+                pattern = "de.adorsys.sts.keymanagement.core.*",
+                type = FilterType.REGEX
+        )}
 )
 public class KeyManagementConfiguration {
-
-    @Bean
-    KeyConversionService keyConversionService(
-            KeyManagementConfigurationProperties keyManagementProperties
-    ) {
-        return new KeyConversionService(keyManagementProperties.getKeystore().getPassword());
-    }
 
     @Bean
     KeyManagementService keyManagerService(
@@ -35,51 +31,6 @@ public class KeyManagementConfiguration {
         return new KeyManagementService(
                 keyStoreRepository,
                 keyConversionService
-        );
-    }
-
-    @Bean
-    Clock clock() {
-        return Clock.systemUTC();
-    }
-
-    @Bean
-    KeyStoreGenerator keyStoreGenerator(
-            Clock clock,
-            @Qualifier("enc") KeyPairGenerator encKeyPairGenerator,
-            @Qualifier("sign") KeyPairGenerator signKeyPairGenerator,
-            SecretKeyGenerator secretKeyGenerator,
-            KeyManagementConfigurationProperties keyManagementProperties
-    ) {
-        return new KeyStoreGenerator(
-                clock,
-                encKeyPairGenerator,
-                signKeyPairGenerator,
-                secretKeyGenerator,
-                keyManagementProperties
-        );
-    }
-
-    @Bean(name = "enc")
-    KeyPairGenerator encKeyPairGenerator(
-            KeyManagementConfigurationProperties keyManagementProperties
-    ) {
-        return new KeyPairGenerator(keyManagementProperties.getKeystore().getKeys().getEncKeyPairs());
-    }
-
-    @Bean(name = "sign")
-    KeyPairGenerator signKeyPairGenerator(
-            KeyManagementConfigurationProperties keyManagementProperties
-    ) {
-        return new KeyPairGenerator(keyManagementProperties.getKeystore().getKeys().getSignKeyPairs());
-    }
-
-    @Bean
-    SecretKeyGenerator secretKeyGenerator(
-            KeyManagementConfigurationProperties keyManagementProperties
-    ) {
-        return new SecretKeyGenerator(
-                keyManagementProperties.getKeystore().getKeys().getSecretKeys()
         );
     }
 

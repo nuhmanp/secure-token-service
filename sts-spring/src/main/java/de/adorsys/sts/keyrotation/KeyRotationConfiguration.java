@@ -1,6 +1,6 @@
 package de.adorsys.sts.keyrotation;
 
-import de.adorsys.sts.keymanagement.KeyManagementConfiguration;
+import de.adorsys.sts.keymanagement.core.KeyManagementCoreConfiguration;
 import de.adorsys.sts.keymanagement.service.KeyRotationService;
 import de.adorsys.sts.keymanagement.service.KeyStoreGenerator;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import java.time.Clock;
 @Configuration
 @EnableScheduling
 @ComponentScan("de.adorsys.sts.keyrotation")
-@Import(KeyManagementConfiguration.class)
+@Import(KeyManagementCoreConfiguration.class)
 public class KeyRotationConfiguration {
 
     @Bean

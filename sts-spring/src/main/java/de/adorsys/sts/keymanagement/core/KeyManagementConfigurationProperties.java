@@ -1,8 +1,9 @@
-package de.adorsys.sts.keymanagement;
+package de.adorsys.sts.keymanagement.core;
 
 import de.adorsys.sts.keymanagement.service.KeyManagementProperties;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 

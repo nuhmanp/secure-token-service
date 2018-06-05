@@ -13,7 +13,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>sts-plugin-login-example</module>
+        <module>sts-plugin-example</module>
+        <module>sts-mongo-plugin</module>
+        <module>sts-pop-plugin</module>
+        <module>sts-keymanagement-core-plugin</module>
     </modules>
 
     <dependencyManagement>
