@@ -56,6 +56,7 @@
 		<cryptoutils.version>0.23.5</cryptoutils.version>
 		<lock-persistence.version>0.3.1</lock-persistence.version>
 		<jackson.version>2.9.7</jackson.version>
+		<keycloak.version>4.4.0.Final</keycloak.version>
 		<scmBranch />
 	</properties>
 	
@@ -80,6 +81,7 @@
 		<module>sts-secret</module>
 		<module>sts-simple-encryption</module>
 		<module>sts-crypto-utils</module>
+		<module>sts-keycloak-adapter</module>
 	</modules>
 
 	<dependencyManagement>
@@ -223,6 +225,7 @@
 				<artifactId>jjwk</artifactId>
 				<version>${cryptoutils.version}</version>
 			</dependency>
+
 	        <!-- Minio Connection -->
 	        <dependency>
 	            <groupId>de.adorsys.cryptoutils</groupId>
@@ -294,6 +297,7 @@
 				<version>1.4.197</version>
 				<scope>runtime</scope>
 			</dependency>
+
 	        <!-- Persistence -->
 	        <dependency>
 	            <groupId>de.adorsys</groupId>
@@ -307,6 +311,27 @@
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
 				<version>3.17</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-core</artifactId>
+				<version>${keycloak.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-server-spi</artifactId>
+				<version>${keycloak.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-server-spi-private</artifactId>
+				<version>${keycloak.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-services</artifactId>
+				<version>${keycloak.version}</version>
 			</dependency>
 
 			<!-- Testing Libraries -->
